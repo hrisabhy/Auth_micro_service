@@ -1,11 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const bcrypt = require('bcryptjs');
 
 const {PORT} = require("./config/serverConfig");
-const {User} = require("./models/index");
-const UserRepository = require("./repository/user-repository");
 const ApiRouter = require("./routes/index");
+
+const UserService = require("./services/user-service");
 
 const app = express();
 
@@ -16,16 +15,14 @@ const prepareAndStartServer = () => {
     app.use('/api', ApiRouter);
     
     app.listen(PORT, async () => {
-        // const user = await User.findByPk(2);
-        // const incomingPw = 'ilovepavvu'
-        // const response = bcrypt.compareSync(incomingPw, user.password)
-        // console.log(response)
-
-        // const userRepo = new UserRepository();
-        // const user = await userRepo.getById(1);
-        // console.log(user)
-
         console.log(`Server started at ${PORT}`);
+        const service = new UserService();
+        // const newToken = service.createToken({email: "hrisabhyadav31@gmail.com", id: 1});
+        // console.log("New token: ", newToken)
+
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhyaXNhYmh5YWRhdjMxQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3MTk5ODA5OTcsImV4cCI6MTcxOTk4NDU5N30.bwe22OUfuFnz5xtVZKZgXC5yJfG-0s0hHUeseeKoEYc"
+        const response = service.verifyToken(token);
+        console.log(response)
     })
 }
 
